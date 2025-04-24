@@ -1,0 +1,9 @@
+d00702f7a1109c76834d1b30d8228f03 *DESCRIPTION
+7f703736ec1db9e7b6f2a2914870b648 *LICENSE
+f0d4bffcf58358c40c8594cd7ecae2bd *NAMESPACE
+efd8e905ebbba9d853612460fd00e685 *R/chatLLM.R
+9433b4ab5b2e1b5ab97c68069ce44dcb *README.md
+7c86a8588242fe55e524de40203b1708 *man/call_llm.Rd
+84e7475a7894ccc2a593f4e2c7c772fe *tests/testthat.R
+53d3d563fc1ffc3ced6dc4f9d568ca98 *tests/testthat/00_setup.R
+7cf94792f53ffd950098dc60036ee268 *tests/testthat/test_chatLLM.R
