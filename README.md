@@ -1,192 +1,186 @@
-# chatLLM
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# chatLLM <a href="https://knowusuboaky.github.io/chatLLM/"><img src="man/figures/openlogo.png" align="right" height="120" /></a>
 
 <!-- badges: start -->
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![CRAN status](https://www.r-pkg.org/badges/version/chatLLM)](https://cran.r-project.org/package=chatLLM)
-[![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/chatLLM?color=orange)](https://cranlogs.r-pkg.org/badges/grand-total/chatLLM)
-[![Codecov test coverage](https://codecov.io/gh/knowusuboaky/chatLLM/branch/main/graph/badge.svg)](https://app.codecov.io/gh/knowusuboaky/chatLLM?branch=main)
-[![Last Commit](https://img.shields.io/github/last-commit/knowusuboaky/chatLLM.svg)](https://github.com/knowusuboaky/chatLLM/commits/main)
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/chatLLM)](https://cran.r-project.org/package=chatLLM)
+[![Codecov](https://codecov.io/gh/knowusuboaky/chatLLM/branch/main/graph/badge.svg)](https://app.codecov.io/gh/knowusuboaky/chatLLM?branch=main)
+[![Last
+Commit](https://img.shields.io/github/last-commit/knowusuboaky/chatLLM.svg)](https://github.com/knowusuboaky/chatLLM/commits/main)
 [![Issues](https://img.shields.io/github/issues/knowusuboaky/chatLLM.svg)](https://github.com/knowusuboaky/chatLLM/issues)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/chatLLM?color=orange)](https://cranlogs.r-pkg.org/badges/grand-total/chatLLM)
+
 <!-- badges: end -->
 
 ## Overview
 
-**chatLLM** is an R package that provides a unified and flexible interface for interacting with popular Large Language Model (LLM) providers such as **OpenAI**, **Groq**, and **Anthropic**. It allows you to easily switch between providers, design complex multi-message interactions, and simulate API calls for testing purposes—using a customizable `.post_func` parameter.
+**chatLLM** is an R package providing a single, consistent interface to
+multiple “OpenAI‑compatible” chat APIs (OpenAI, Groq, Anthropic,
+DeepSeek, Alibaba DashScope, and GitHub Models).
 
-Features include:
+Key features:
 
-- 🔁 Seamless provider switching (OpenAI, Groq, Anthropic)
-- 🗣 Support for both single-prompt and multi-message interactions
-- 🔄 Integrated retry mechanism with configurable attempts and backoff delays
-- 🔌 Parameter extensibility for advanced API features (e.g., presence/frequency penalty, top_p, stop sequences)
-- 🛠 Easy testing and simulation via a built-in mechanism to override HTTP calls
+- 🔄 **Uniform API** across providers
+- 🗣 **Multi‑message context** (system/user/assistant roles)
+- 🔁 **Retries & backoff** with clear timeout handling
+- 🔈 **Verbose control** (`verbose = TRUE/FALSE`)
+- ⚙️ **Discover models** via `list_models()`
+- 🏗 **Factory interface** for repeated calls
+- 🌐 **Custom endpoint** override and advanced tuning
 
----
+------------------------------------------------------------------------
 
 ## Installation
 
-```r
-# Install from GitHub
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+From CRAN:
+
+``` r
+install.packages("chatLLM")
+```
+
+Development version:
+
+``` r
+# install.packages("remotes")  # if needed
 remotes::install_github("knowusuboaky/chatLLM")
 ```
 
----
+------------------------------------------------------------------------
 
-## Environment Setup
+## Setup
 
-To use `chatLLM` with LLM providers, please ensure your API keys are set as environment variables so that sensitive credentials are not hardcoded in your scripts.
+Set your API keys or tokens once per session:
 
-### Example: Setting Environment Variables in R
-
-```r
-# You can add these to your .Renviron file or run them once per session
-Sys.setenv(OPENAI_API_KEY    = "your-openai-api-key")
-Sys.setenv(GROQ_API_KEY      = "your-groq-api-key")
-Sys.setenv(ANTHROPIC_API_KEY = "your-anthropic-api-key")
+``` r
+Sys.setenv(
+  OPENAI_API_KEY     = "your-openai-key",
+  GROQ_API_KEY       = "your-groq-key",
+  ANTHROPIC_API_KEY  = "your-anthropic-key",
+  DEEPSEEK_API_KEY   = "your-deepseek-key",
+  DASHSCOPE_API_KEY  = "your-dashscope-key",
+  GH_MODELS_TOKEN    = "your-github-models-token"
+)
 ```
 
-> 💡 **Tip:** To persist these keys across sessions, add them to your `~/.Renviron` file (this file should be excluded from version control).
-
----
+------------------------------------------------------------------------
 
 ## Usage
 
-### 1. Simple Prompt Call
+### 1. Simple Prompt
 
-```r
+``` r
 response <- call_llm(
-  prompt = "Who is messi?",
-  provider = "openai",
-  max_tokens = 50,
-  n_tries = 3,
-  backoff = 2
+  prompt     = "Who is Messi?",
+  provider   = "openai",
+  max_tokens = 300
 )
 cat(response)
 ```
 
-### 2. Multi-Message Conversation
+### 2. Multi‑Message Conversation
 
-```r
+``` r
 conv <- list(
-  list(role = "system", content = "You are a helpful assistant."),
-  list(role = "user", content = "Explain recursion in R.")
+  list(role    = "system",    content = "You are a helpful assistant."),
+  list(role    = "user",      content = "Explain recursion in R.")
 )
 response <- call_llm(
-  messages = conv,
-  provider = "openai",
-  max_tokens = 200,
-  presence_penalty = 0.2,
+  messages          = conv,
+  provider          = "openai",
+  max_tokens        = 200,
+  presence_penalty  = 0.2,
   frequency_penalty = 0.1,
-  top_p = 0.95
+  top_p             = 0.95
 )
 cat(response)
 ```
 
-### 3. Using a Custom Fake POST Function for Testing
+### 3. Verbose Off
 
-For testing or simulation, you can override the default HTTP POST call using the `.post_func` argument. For example, the code snippet below defines a fake POST function that mimics a real `httr` response object:
+Suppress informational messages:
 
-```r
-# A revised fake POST function that returns a closer-to-real httr::response object
-fake_post <- function(url, encode, body, req_headers, ...) {
-  # Check for a "recursion" message: if found, return a recursion-related answer:
-  if (!is.null(body$messages)) {
-    if (any(grepl("recursion", unlist(lapply(body$messages, `[[`, "content")), ignore.case = TRUE))) {
-      return(structure(
-        list(
-          status_code = 200L,
-          url         = url,
-          headers     = c("Content-Type" = "application/json"),
-          all_headers = list(list(
-            status  = 200L,
-            version = "HTTP/1.1",
-            headers = c("Content-Type" = "application/json")
-          )),
-          content = charToRaw('{"choices": [{"message": {"content": "Fake explanation: In R, recursion is a technique where a function calls itself. It helps with tree traversals, etc."}}]}'),
-          date    = Sys.time()
-        ),
-        class = "response"
-      ))
-    }
-  }
-  # Otherwise, return a generic Lionel Messi answer:
-  structure(
-    list(
-      status_code = 200L,
-      url         = url,
-      headers     = c("Content-Type" = "application/json"),
-      all_headers = list(list(
-        status  = 200L,
-        version = "HTTP/1.1",
-        headers = c("Content-Type" = "application/json")
-      )),
-      content = charToRaw('{"choices": [{"message": {"content": "Fake answer: Lionel Messi is a renowned professional footballer."}}]}'),
-      date    = Sys.time()
-    ),
-    class = "response"
-  )
-}
-
-# Using fake_post for a simple prompt:
-response <- call_llm(
-  prompt = "Who is messi?",
-  provider = "openai",
-  max_tokens = 50,
-  n_tries = 3,
-  backoff = 2,
-  .post_func = fake_post
+``` r
+res <- call_llm(
+  prompt      = "Tell me a joke",
+  provider    = "openai",
+  verbose     = FALSE
 )
-cat(response, "\n\n")
-
-# And for a multi-message conversation:
-conv <- list(
-  list(role = "system", content = "You are a helpful assistant."),
-  list(role = "user", content = "Explain recursion in R.")
-)
-response <- call_llm(
-  messages = conv,
-  provider = "openai",
-  max_tokens = 200,
-  presence_penalty = 0.2,
-  frequency_penalty = 0.1,
-  top_p = 0.95,
-  .post_func = fake_post
-)
-cat(response)
+cat(res)
 ```
 
----
+### 4. Factory Interface
 
-## LLM Support
+Create a reusable LLM function:
 
-`chatLLM` leverages the `call_llm()` function to interface with various providers. For example, switching to Groq's API is as simple as:
-
-```r
-call_llm(
-  prompt = "Summarize the capital of France.",
-  provider = "groq",
-  model = "mixtral-8x7b-32768",
-  temperature = 0.7,
-  max_tokens = 200
+``` r
+# Build a “GitHub Models” engine with defaults baked in
+GitHubLLM <- call_llm(
+  provider    = "github",
+  max_tokens  = 60,
+  verbose     = FALSE
 )
+
+# Invoke it like a function:
+story <- GitHubLLM("Tell me a short story about libraries.")
+cat(story)
 ```
 
----
+### 5. Discover Available Models
 
-## Issues
+``` r
+# All providers at once
+all_models <- list_models("all")
+names(all_models)
 
-If you encounter any issues or have suggestions, please open an issue on [GitHub Issues](https://github.com/knowusuboaky/chatLLM/issues).
+# Only OpenAI models
+openai_models <- list_models("openai")
+head(openai_models)
+```
 
----
+### 6. Call a Specific Model
+
+Pick from the list and pass it to `call_llm()`:
+
+``` r
+anthro_models <- list_models("anthropic")
+cat(call_llm(
+  prompt     = "Write a haiku about autumn.",
+  provider   = "anthropic",
+  model      = anthro_models[1],
+  max_tokens = 60
+))
+```
+
+------------------------------------------------------------------------
+
+## Troubleshooting
+
+- **Timeouts**: increase `n_tries` / `backoff` or supply a custom
+  `.post_func` with higher `timeout()`.
+- **Model Not Found**: use `list_models("<provider>")` or consult
+  provider docs.
+- **Auth Errors**: verify your API key/token and environment variables.
+- **Network Issues**: check VPN/proxy, firewall, or SSL certs.
+
+------------------------------------------------------------------------
+
+## Contributing & Support
+
+Issues and PRs welcome at <https://github.com/knowusuboaky/chatLLM>
+
+------------------------------------------------------------------------
 
 ## License
 
-MIT © [Kwadwo Daddy Nyame Owusu Boakye](mailto:kwadwo.owusuboakye@outlook.com)
+MIT © [Kwadwo Daddy Nyame Owusu -
+Boakye](mailto:kwadwo.owusuboakye@outlook.com)
 
----
+------------------------------------------------------------------------
 
 ## Acknowledgements
 
-`chatLLM` draws inspiration from other innovative projects like **RAGFlowChainR** and benefits from the vibrant R community dedicated to open-source development. Enjoy chatting with your LLMs!
-```
+Inspired by **RAGFlowChainR**, powered by **httr** and the R community.
+Enjoy!

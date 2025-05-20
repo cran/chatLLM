@@ -1,26 +1,28 @@
 Package: chatLLM
 Type: Package
 Title: A Flexible Interface for 'LLM' API Interactions
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person(given = "Kwadwo Daddy Nyame",
                   family = "Owusu Boakye",
                   email = "kwadwo.owusuboakye@outlook.com",
                   role = c("aut", "cre"))
 Maintainer: Kwadwo Daddy Nyame Owusu Boakye <kwadwo.owusuboakye@outlook.com>
 Description: Provides a flexible interface for interacting with Large Language Model ('LLM') 
-    providers such as 'OpenAI' (<https://openai.com/>), 'Groq' (<https://groq.com/>), 
-    and 'Anthropic' (<https://www.anthropic.com/>). Supports both synchronous and asynchronous 
-    API calls with features such as retry logic, support for additional parameters, and 
-    multi-message handling to streamline integration with state-of-the-art 'LLM' APIs.
+    providers including 'OpenAI', 'Groq', 'Anthropic', 'DeepSeek', 'DashScope',
+    and 'GitHub Models'. Supports both synchronous and asynchronous chat-completion APIs, with
+    features such as retry logic, dynamic model selection, customizable parameters, and
+    multi-message conversation handling. Designed to streamline integration with
+    state-of-the-art LLM services across multiple platforms.
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.2
-Imports: httr (>= 1.4.0), jsonlite (>= 1.7.2)
+Imports: httr (>= 1.4.0), jsonlite (>= 1.7.2), stats
 Suggests: future, promises, later, testthat, roxygen2
-URL: https://github.com/knowusuboaky/chatLLM
+URL: https://github.com/knowusuboaky/chatLLM,
+        https://knowusuboaky.github.io/chatLLM/
 BugReports: https://github.com/knowusuboaky/chatLLM/issues
 NeedsCompilation: no
-Packaged: 2025-04-21 16:13:15 UTC; kwadw
+Packaged: 2025-05-20 15:54:01 UTC; kwadw
 Author: Kwadwo Daddy Nyame Owusu Boakye [aut, cre]
 Repository: CRAN
-Date/Publication: 2025-04-24 07:50:06 UTC
+Date/Publication: 2025-05-20 21:50:09 UTC
