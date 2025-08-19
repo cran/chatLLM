@@ -1,9 +1,10 @@
-98fa5722eeb4ffc0b4e7d9d0db0f8231 *DESCRIPTION
+98bb7a3f6911624acff4e8b64fd72525 *DESCRIPTION
 7f703736ec1db9e7b6f2a2914870b648 *LICENSE
 bae3cae968c3baec9f6338410b7c7a39 *NAMESPACE
-1387bf4369624a5db825a607efcdb389 *R/chatLLM.R
-c9fdfc9ebe5af7212fd4a5b28e86d908 *README.md
-c1c61651aa440860e955329b14af0ad0 *man/call_llm.Rd
+70135c1e19005777e23a479cf2896040 *NEWS.md
+f697b11395811e0f3f25791f39b60462 *R/chatLLM.R
+8ab98944d990f0441da69ab8ddbcf686 *README.md
+142385bdc6032be61dc4d8b9a50563c6 *man/call_llm.Rd
 79a709e7d9d0f762af89b8f3ef5ab7fe *man/figures/chatlogo.png
 c47bced8c03669396b75c2e4c2bf87d8 *man/figures/favicon-120.ico
 f394c836f9f4fb6fb262f5ca40713ae0 *man/figures/favicon-32.ico
@@ -11,5 +12,5 @@ f394c836f9f4fb6fb262f5ca40713ae0 *man/figures/favicon-32.ico
 b9f08554a662ee63251c8690e720384a *man/figures/openlogo.png
 e9068e120b1a2d75073dccbf4a4fdaab *man/list_models.Rd
 84e7475a7894ccc2a593f4e2c7c772fe *tests/testthat.R
-53d3d563fc1ffc3ced6dc4f9d568ca98 *tests/testthat/00_setup.R
+5fd74c1d3de45b9f2fc617b853e4e674 *tests/testthat/00_setup.R
 3f0eb4882e3499bea8c1e1aea65a0583 *tests/testthat/test_chatLLM.R
